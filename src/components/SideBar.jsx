@@ -1,0 +1,61 @@
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
+const links = [];
+
+const Sidebar = ({ expanded, setExpanded }) => {
+  const location = useLocation();
+  const isActive = (to) => location.pathname === to;
+
+  return (
+    <>
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-full z-30 bg-light-bg dark:bg-dark-bg border-r border-light-border dark:border-dark-border transition-all duration-400
+          ${expanded ? "w-56" : "w-16"}
+        `}
+        style={{ minWidth: expanded ? 200 : 64 }}
+      >
+        <div
+          className={`flex items-center justify-between  md:border-b border-light-border dark:border-dark-border ${
+            expanded ? "px-4" : "p-4"
+          }`}
+        >
+          <button
+            className="hidden md:block ml-auto cursor-pointer p-2 rounded-xl  bg-light-bg dark:bg-dark-bg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            onClick={() => setExpanded((v) => !v)}
+            aria-label="Toggle sidebar"
+          >
+            {expanded ? (
+              <FiChevronLeft size={20} />
+            ) : (
+              <FiChevronRight size={20} />
+            )}
+          </button>
+        </div>
+        <nav className="flex flex-col gap-1 mt-4">
+          {links.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={` flex items-center gap-3 px-4 py-2 rounded-xl transition-colors
+                ${
+                  isActive(link.to)
+                    ? "bg-light-primary text-white dark:bg-dark-primary"
+                    : "text-light-text-primary dark:text-dark-text-primary hover:text-white dark:hover:bg-[#3b82f6] dark:hover:text-white"
+                }
+                ${expanded ? "justify-start" : "justify-center"}
+              `}
+            >
+              <span className="text-xl">{link.icon}</span>
+              {expanded && <span className="text-base">{link.label}</span>}
+            </Link>
+          ))}
+        </nav>
+      </aside>
+    </>
+  );
+};
+
+export default Sidebar;
