@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const {login} = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -31,7 +34,7 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     let newErrors = {};
     let isValid = true;
@@ -54,11 +57,16 @@ const Login = () => {
     setErrors(newErrors);
 
     if (isValid) {
-      // Here you would typically make an API call
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 3000);
+      const isLogin = await login(formData.email, formData.password);
+      console.log(isLogin);
+      
+      if(isLogin){
+        setShowSuccess(true);
+        navigate('/');
+      }
+      else{
+        alert("Invalid Credentials!!");
+      }
     }
   };
 
