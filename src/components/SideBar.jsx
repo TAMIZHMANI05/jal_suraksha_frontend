@@ -1,8 +1,36 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import {
+  FiBarChart2,
+  FiChevronLeft,
+  FiChevronRight,
+  FiDroplet,
+  FiUser,
+} from "react-icons/fi";
+import { BsFillGearFill, BsGear } from "react-icons/bs";
 
-const links = [];
+const links = [
+  {
+    to: "/",
+    icon: <FiBarChart2 />,
+    label: "Dashboard",
+  },
+  {
+    to: "/user",
+    icon: <FiUser />,
+    label: "User Management",
+  },
+  {
+    to: "/water",
+    icon: <FiDroplet/>,
+    label: "Water Source Management",
+  },
+  {
+    to: "/device",
+    icon: <BsGear/>,
+    label: "Device Management",
+  },
+];
 
 const Sidebar = ({ expanded, setExpanded }) => {
   const location = useLocation();
@@ -22,8 +50,13 @@ const Sidebar = ({ expanded, setExpanded }) => {
             expanded ? "px-4" : "p-4"
           }`}
         >
+          {expanded && (
+            <h1 className="text-lg font-semibold text-blue-600 dark:text-dark-text-primary py-5">
+              Jal Suraksha
+            </h1>
+          )}
           <button
-            className="hidden md:block ml-auto cursor-pointer p-2 rounded-xl  bg-light-bg dark:bg-dark-bg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="hidden md:block ml-auto cursor-pointer p-2 rounded-xl  bg-light-bg dark:bg-dark-bg hover:bg-gray-100 transition-colors"
             onClick={() => setExpanded((v) => !v)}
             aria-label="Toggle sidebar"
           >
@@ -40,11 +73,7 @@ const Sidebar = ({ expanded, setExpanded }) => {
               key={link.to}
               to={link.to}
               className={` flex items-center gap-3 px-4 py-2 rounded-xl transition-colors
-                ${
-                  isActive(link.to)
-                    ? "bg-light-primary text-white dark:bg-dark-primary"
-                    : "text-light-text-primary dark:text-dark-text-primary hover:text-white dark:hover:bg-[#3b82f6] dark:hover:text-white"
-                }
+               "text-light-text-primary dark:text-dark-text-primary hover:text-white dark:hover:bg-[#3b82f6] dark:hover:text-white"
                 ${expanded ? "justify-start" : "justify-center"}
               `}
             >
