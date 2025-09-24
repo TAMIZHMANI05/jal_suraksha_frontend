@@ -34,7 +34,7 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     let newErrors = {};
     let isValid = true;
@@ -57,12 +57,11 @@ const Login = () => {
     setErrors(newErrors);
 
     if (isValid) {
-      const isLogin = await login(formData.email, formData.password);
-      console.log(isLogin);
-      
+      const isLogin = login(formData.email, formData.password);
       if(isLogin){
         setShowSuccess(true);
         navigate('/');
+        
       }
       else{
         alert("Invalid Credentials!!");

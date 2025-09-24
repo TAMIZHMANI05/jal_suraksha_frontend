@@ -4,6 +4,9 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import UserManagement from "./pages/UserManagement";
+import Water from "./pages/Water";
+import Device from "./pages/Device";
 
 function App() {
   return (
@@ -16,6 +19,30 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user"
+            element={
+              <ProtectedRoute>
+                <UserManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/water"
+            element={
+              <ProtectedRoute>
+                <Water />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/device"
+            element={
+              <ProtectedRoute>
+                <Device />
               </ProtectedRoute>
             }
           />
