@@ -5,8 +5,8 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import UserManagement from "./pages/UserManagement";
-import Water from "./pages/Water";
 import Device from "./pages/Device";
+import Water from "./pages/Water";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
             path="/water"
             element={
               <ProtectedRoute>
-                <Water />
+                <Water/>
               </ProtectedRoute>
             }
           />
