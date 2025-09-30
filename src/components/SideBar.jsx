@@ -15,11 +15,11 @@ const links = [
     icon: <FiBarChart2 />,
     label: "Dashboard",
   },
-  {
-    to: "/user",
-    icon: <FiUser />,
-    label: "User Management",
-  },
+  // {
+  //   to: "/user",
+  //   icon: <FiUser />,
+  //   label: "User Management",
+  // },
   {
     to: "/water",
     icon: <FiDroplet/>,
