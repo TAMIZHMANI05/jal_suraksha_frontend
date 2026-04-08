@@ -4,6 +4,9 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
+const [assignedDevice, setAssignedDevice] = useState(null);
+const [modalState, setModalState] = useState({ deviceInfo: false });
+
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
@@ -316,7 +319,34 @@ const Water = () => {
       setError(err.message)
     }
   }
+  useEffect(() => {
+  let interval;
 
+  if (modalState.deviceInfo && assignedDevice?.log_id) {
+    interval = setInterval(async () => {
+      try {
+        const logResponse = await api.get(`/logs/${assignedDevice.log_id}`);
+        const logData = logResponse.data.data;
+
+        setAssignedDevice(prev => ({
+          ...prev,
+          waterQuality: {
+            tds: logData.tds,
+            temperature: logData.temperature,
+            color: logData.color,
+            turbidity: logData.turbidity
+          }
+        }));
+      } catch (err) {
+        console.log(err);
+      }
+    }, 5000); // every 5 seconds
+  }
+
+  return () => clearInterval(interval);
+}, [modalState.deviceInfo, assignedDevice?.log_id]);
+
+  
   const closeAllModals = () => {
     setModalState({
       add: false,
