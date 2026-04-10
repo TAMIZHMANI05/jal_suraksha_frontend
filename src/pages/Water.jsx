@@ -4,9 +4,6 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
-const [assignedDevice, setAssignedDevice] = useState(null);
-const [modalState, setModalState] = useState({ deviceInfo: false });
-
 // Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl
 L.Icon.Default.mergeOptions({
@@ -18,7 +15,7 @@ L.Icon.Default.mergeOptions({
 // Modal component for reusability
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
-  
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg w-full max-w-md">
@@ -40,7 +37,7 @@ const LocationSearch = ({ onLocationSelect }) => {
       setSearchResults([])
       return
     }
-    
+
     setLoading(true)
     try {
       const response = await fetch(
@@ -118,8 +115,8 @@ const LocationPicker = ({ position, onLocationPick }) => {
   }, [position, map])
 
   return position ? (
-    <Marker 
-      position={position} 
+    <Marker
+      position={position}
       draggable={true}
       eventHandlers={{
         dragend: (e) => {
@@ -135,15 +132,15 @@ const LocationPicker = ({ position, onLocationPick }) => {
 const MapPreview = ({ lat, long, onLocationPick = null }) => {
   const position = [lat || 20.5937, long || 78.9629] // Default to India's center if no coords
   const [map, setMap] = useState(null)
-  
+
   return (
     <div className="relative w-full h-[400px] bg-gray-100 rounded overflow-hidden">
       {onLocationPick && (
-        <LocationSearch 
+        <LocationSearch
           onLocationSelect={(latlng) => {
             onLocationPick(latlng)
             map?.setView([latlng.lat, latlng.lng], 16)
-          }} 
+          }}
         />
       )}
       <MapContainer
@@ -300,11 +297,11 @@ const Water = () => {
       // First get the device details
       const deviceResponse = await api.get(`/devices/${deviceId}`)
       const device = deviceResponse.data.data
-      
+
       // Then get the logs using the log_id
       const logResponse = await api.get(`/logs/${device.log_id}`)
       const logData = logResponse.data.data
-      
+
       setAssignedDevice({
         ...device,
         waterQuality: {
@@ -320,33 +317,33 @@ const Water = () => {
     }
   }
   useEffect(() => {
-  let interval;
+    let interval;
 
-  if (modalState.deviceInfo && assignedDevice?.log_id) {
-    interval = setInterval(async () => {
-      try {
-        const logResponse = await api.get(`/logs/${assignedDevice.log_id}`);
-        const logData = logResponse.data.data;
+    if (modalState.deviceInfo && assignedDevice?.log_id) {
+      interval = setInterval(async () => {
+        try {
+          const logResponse = await api.get(`/logs/${assignedDevice.log_id}`);
+          const logData = logResponse.data.data;
 
-        setAssignedDevice(prev => ({
-          ...prev,
-          waterQuality: {
-            tds: logData.tds,
-            temperature: logData.temperature,
-            color: logData.color,
-            turbidity: logData.turbidity
-          }
-        }));
-      } catch (err) {
-        console.log(err);
-      }
-    }, 5000); // every 5 seconds
-  }
+          setAssignedDevice(prev => ({
+            ...prev,
+            waterQuality: {
+              tds: logData.tds,
+              temperature: logData.temperature,
+              color: logData.color,
+              turbidity: logData.turbidity
+            }
+          }));
+        } catch (err) {
+          console.log(err);
+        }
+      }, 5000); // every 5 seconds
+    }
 
-  return () => clearInterval(interval);
-}, [modalState.deviceInfo, assignedDevice?.log_id]);
+    return () => clearInterval(interval);
+  }, [modalState.deviceInfo, assignedDevice?.log_id]);
 
-  
+
   const closeAllModals = () => {
     setModalState({
       add: false,
@@ -645,14 +642,13 @@ const Water = () => {
               <div className="space-y-2">
                 <p><strong>Device ID:</strong> <span className="font-mono">{assignedDevice.id}</span></p>
                 <p><strong>Model:</strong> {assignedDevice.model}</p>
-                <p><strong>Status:</strong> 
-                  <span className={`ml-2 px-2 py-1 rounded-full text-sm ${
-                    assignedDevice.status === 'active' 
+                <p><strong>Status:</strong>
+                  <span className={`ml-2 px-2 py-1 rounded-full text-sm ${assignedDevice.status === 'active'
                       ? 'bg-green-100 text-green-800'
                       : 'bg-red-100 text-red-800'
-                  }`}>
-                  {assignedDevice.status}
-                </span>
+                    }`}>
+                    {assignedDevice.status}
+                  </span>
                 </p>
               </div>
             </div>
@@ -671,14 +667,13 @@ const Water = () => {
                         <span className="text-sm text-blue-400 ml-1">mg/L</span>
                       </div>
                       <div className="w-16 h-16 rounded-full border-4 border-blue-200 flex items-center justify-center">
-                        <div 
-                          className={`text-sm font-medium ${
-                            assignedDevice.waterQuality.tds < 300 ? 'text-green-600' :
-                            assignedDevice.waterQuality.tds < 600 ? 'text-yellow-600' : 'text-red-600'
-                          }`}
+                        <div
+                          className={`text-sm font-medium ${assignedDevice.waterQuality.tds < 300 ? 'text-green-600' :
+                              assignedDevice.waterQuality.tds < 600 ? 'text-yellow-600' : 'text-red-600'
+                            }`}
                         >
                           {assignedDevice.waterQuality.tds < 300 ? 'Good' :
-                           assignedDevice.waterQuality.tds < 600 ? 'Fair' : 'Poor'}
+                            assignedDevice.waterQuality.tds < 600 ? 'Fair' : 'Poor'}
                         </div>
                       </div>
                     </div>
@@ -693,14 +688,13 @@ const Water = () => {
                         <span className="text-sm text-orange-400 ml-1">°C</span>
                       </div>
                       <div className="w-16 h-16 rounded-full border-4 border-orange-200 flex items-center justify-center">
-                        <div 
-                          className={`text-sm font-medium ${
-                            assignedDevice.waterQuality.temperature > 35 ? 'text-red-600' :
-                            assignedDevice.waterQuality.temperature < 15 ? 'text-blue-600' : 'text-green-600'
-                          }`}
+                        <div
+                          className={`text-sm font-medium ${assignedDevice.waterQuality.temperature > 35 ? 'text-red-600' :
+                              assignedDevice.waterQuality.temperature < 15 ? 'text-blue-600' : 'text-green-600'
+                            }`}
                         >
                           {assignedDevice.waterQuality.temperature > 35 ? 'Hot' :
-                           assignedDevice.waterQuality.temperature < 15 ? 'Cold' : 'Normal'}
+                            assignedDevice.waterQuality.temperature < 15 ? 'Cold' : 'Normal'}
                         </div>
                       </div>
                     </div>
@@ -710,8 +704,8 @@ const Water = () => {
                   <div className="p-4 bg-purple-50 rounded-lg shadow-sm">
                     <h4 className="text-lg font-medium mb-2">Water Color</h4>
                     <div className="flex items-center space-x-4">
-                      <div 
-                        className="w-16 h-16 rounded-lg border-2 border-gray-200" 
+                      <div
+                        className="w-16 h-16 rounded-lg border-2 border-gray-200"
                         style={{ backgroundColor: assignedDevice.waterQuality.color }}
                       ></div>
                       <div className="text-lg">
@@ -730,14 +724,13 @@ const Water = () => {
                         <span className="text-sm text-teal-400 ml-1">NTU</span>
                       </div>
                       <div className="w-16 h-16 rounded-full border-4 border-teal-200 flex items-center justify-center">
-                        <div 
-                          className={`text-sm font-medium ${
-                            assignedDevice.waterQuality.turbidity < 5 ? 'text-green-600' :
-                            assignedDevice.waterQuality.turbidity < 10 ? 'text-yellow-600' : 'text-red-600'
-                          }`}
+                        <div
+                          className={`text-sm font-medium ${assignedDevice.waterQuality.turbidity < 5 ? 'text-green-600' :
+                              assignedDevice.waterQuality.turbidity < 10 ? 'text-yellow-600' : 'text-red-600'
+                            }`}
                         >
                           {assignedDevice.waterQuality.turbidity < 5 ? 'Clear' :
-                           assignedDevice.waterQuality.turbidity < 10 ? 'Cloudy' : 'Murky'}
+                            assignedDevice.waterQuality.turbidity < 10 ? 'Cloudy' : 'Murky'}
                         </div>
                       </div>
                     </div>
