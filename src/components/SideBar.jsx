@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
+  FiActivity,
   FiBarChart2,
   FiChevronLeft,
   FiChevronRight,
@@ -14,6 +15,11 @@ const links = [
     to: "/",
     icon: <FiBarChart2 />,
     label: "Dashboard",
+  },
+  {
+    to: "/analytics",
+    icon: <FiActivity />,
+    label: "Analytics",
   },
   // {
   //   to: "/user",

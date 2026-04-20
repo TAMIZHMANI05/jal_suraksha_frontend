@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import UserManagement from "./pages/UserManagement";
 import Device from "./pages/Device";
 import Water from "./pages/Water";
+import Analytics from "./pages/Analytics";
 
 function App() {
   return (
@@ -19,6 +20,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
               </ProtectedRoute>
             }
           />
